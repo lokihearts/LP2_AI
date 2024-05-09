@@ -1,0 +1,73 @@
+from collections import deque
+
+class Graph:
+    def __init__(self):
+        self.adj_list = {}
+
+    def add_edge(self, u, v):
+        if u not in self.adj_list:
+            self.adj_list[u] = []
+        if v not in self.adj_list:
+            self.adj_list[v] = []
+        self.adj_list[u].append(v)
+        self.adj_list[v].append(u)
+
+    def get_neighbors(self, u):
+        return self.adj_list.get(u, [])
+
+def dfs_recursive(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+
+    visited.add(start)
+    print(start)
+
+    for neighbor in graph.get_neighbors(start):
+        if neighbor not in visited:
+            dfs_recursive(graph, neighbor, visited)
+
+def bfs(graph, start):
+    queue = deque([start])
+    visited = set()
+
+    while queue:
+        node = queue.popleft()
+        visited.add(node)
+        print(node)
+
+        for neighbor in graph.get_neighbors(node):
+            if neighbor not in visited:
+                queue.append(neighbor)
+
+def main():
+    graph = Graph()
+
+    while True:
+        print("\nMenu:")
+        print("1. Add Edge")
+        print("2. Depth-First Search (DFS)")
+        print("3. Breadth-First Search (BFS)")
+        print("4. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            u = int(input("Enter source vertex: "))
+            v = int(input("Enter destination vertex: "))
+            graph.add_edge(u, v)
+        elif choice == "2":
+            start = int(input("Enter starting vertex for DFS: "))
+            print("\nDepth-First Search:")
+            dfs_recursive(graph, start)
+        elif choice == "3":
+            start = int(input("Enter starting vertex for BFS: "))
+            print("\nBreadth-First Search:")
+            bfs(graph, start)
+        elif choice == "4":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+if __name__ == "__main__":
+    main()
